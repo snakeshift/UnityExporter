@@ -207,7 +207,7 @@ declare module BABYLON {
         /** Creates an instance of the specified mesh asset into the scene. (Mesh Instance) */
         static CreateInstancedMesh(container: BABYLON.AssetContainer, meshName: string, instanceName: string): BABYLON.InstancedMesh;
         /** Registers a script componment with the scene manager. */
-        static RegisterScriptComponent(instance: BABYLON.ScriptComponent, klass: string, validate?: boolean): void;
+        static RegisterScriptComponent(instance: BABYLON.ScriptComponent, alias: string, validate?: boolean): void;
         /** Destroys a script component instance. */
         static DestroyScriptComponent(instance: BABYLON.ScriptComponent): void;
         /** Finds a script component on the transform with the specfied class name. */
@@ -1931,6 +1931,7 @@ declare module BABYLON {
         animationFirstRun: boolean;
         animationEndFrame: boolean;
         animationLoopFrame: boolean;
+        animationLoopEvents: any;
         animationStateMachine: BABYLON.MachineState;
     }
     interface IAnimationCurve {
