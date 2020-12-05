@@ -46,6 +46,8 @@ declare module BABYLON {
         static GetFullscreenUI(scene: BABYLON.Scene): BABYLON.GUI.AdvancedDynamicTexture;
         /** Get the scene default ambient skybox mesh */
         static GetAmbientSkybox(scene: BABYLON.Scene): BABYLON.AbstractMesh;
+        /** Get the scene default intenisty factor */
+        static GetIntensityFactor(): number;
         /** Are scene manager debugging services available. */
         static IsDebugMode(): boolean;
         /** Send log data directly to the console. */
@@ -152,8 +154,10 @@ declare module BABYLON {
         static LoadTextFile(url: string, onSuccess: (data: string) => void, onProgress?: (data: any) => void, onError?: (request?: WebRequest, exception?: any) => void): BABYLON.IFileRequest;
         /** Load a text based file */
         static LoadTextFileAsync(url: string): Promise<string>;
-        /** Post data to server */
-        static PostDataToServer(url: string, data: string | Document | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | ReadableStream<Uint8Array>, contentType?: string, onComplete?: (status: int) => void): XMLHttpRequest;
+        /** Post data to server (XmlHttpRequest) */
+        static PostDataToServer(url: string, data: string | Document | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | ReadableStream<Uint8Array>, contentType?: string, onSuccess?: (status: int) => void, onFailure?: (reason: any) => void): XMLHttpRequest;
+        /** Post data to server asynchronously */
+        static PostDataToServerAsync(url: string, data: string | Document | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | ReadableStream<Uint8Array>, contentType?: string): Promise<number>;
         /** Shows the default page scene loader. */
         static ShowDefaultLoader(show: boolean): void;
         /** Update the default page scene loader status. */
@@ -2676,6 +2680,7 @@ declare module BABYLON {
         protected m_abstractMesh: BABYLON.AbstractMesh;
         protected m_videoTexture: BABYLON.VideoTexture;
         protected m_videoMaterial: BABYLON.StandardMaterial;
+        protected m_diffuseIntensity: number;
         protected awake(): void;
         protected destroy(): void;
         protected awakeWebVideoPlayer(): void;
