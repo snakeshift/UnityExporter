@@ -2621,7 +2621,6 @@ declare module BABYLON {
         /** Sets entity collision shape margin using physics impostor body. (Advanved Use Only) */
         setCollisionShapeMargin(margin: number): void;
         /** Gets the entity contact processing threshold using physics impostor body. (Advanved Use Only) */
-        getContactProcessingThreshold(): number;
         /** Sets entity contact processing threshold using physics impostor body. (Advanved Use Only) */
         setContactProcessingThreshold(threshold: number): void;
         /** TODO */
