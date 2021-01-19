@@ -1694,7 +1694,6 @@ declare module BABYLON {
         private _layercount;
         private _updatemode;
         private _hasrootmotion;
-        private _processmotion;
         private _initialtargetblending;
         private _hastransformhierarchy;
         private _leftfeetbottomheight;
@@ -1739,11 +1738,10 @@ declare module BABYLON {
         private _triggers;
         private _parameters;
         speedRatio: number;
-        updatePosition: boolean;
-        updateRotation: boolean;
         applyRootMotion: boolean;
         enableAnimation: boolean;
         moveWithCollisions: boolean;
+        worldSpaceRootMotion: boolean;
         hasRootMotion(): boolean;
         getAnimationTime(): number;
         getRootPosition(): BABYLON.Vector3;
@@ -2600,14 +2598,10 @@ declare module BABYLON {
         getAngularVelocity(): BABYLON.Nullable<BABYLON.Vector3>;
         /** Sets entity angular velocity using physics impostor. */
         setAngularVelocity(velocity: BABYLON.Vector3): void;
-        /** sets the native physics world transform object using physics impostor body. (Advanved Use Only) */
-        /** Gets the native physics world transform object using physics impostor body. (Advanved Use Only) */
-        /** Sets the entity world transform position using physics impostor body. (Advanved Use Only) */
-        /** Gets the entity world transform position using physics impostor body. (Advanved Use Only) */
-        /** Gets the entity world transform position using physics impostor body. (Advanved Use Only) */
-        /** Sets the entity world transform position using physics impostor body. (Advanved Use Only) */
-        /** Gets the entity world transform rotation using physics impostor body. (Advanved Use Only) */
-        /** Gets the entity world transform rotation using physics impostor body. (Advanved Use Only) */
+        /** Gets the native physics world transform object using physics impostor body. (Ammo.btTransform) */
+        getWorldTransform(): any;
+        /** sets the native physics world transform object using physics impostor body. (Ammo.btTransform) */
+        setWorldTransform(btTransform: any): any;
         clearForces(): void;
         applyTorque(torque: BABYLON.Vector3): void;
         applyLocalTorque(torque: BABYLON.Vector3): void;
