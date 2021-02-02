@@ -10,6 +10,8 @@ declare module BABYLON {
         static get Copyright(): string;
         /** Pauses the main page render loop */
         static PauseRenderLoop: boolean;
+        /** Returns a Promise that resolves after the specfied time */
+        static WaitForSeconds: (seconds: number) => Promise<void>;
         /** Register handler that is triggered when the fonts have been loaded (engine.html) */
         static OnFontsReadyObservable: Observable<Engine>;
         /** Register handler that is triggered when then engine has been resized (engine.html) */
@@ -839,6 +841,7 @@ declare module BABYLON {
         Deg2Rad,
         Rad2Deg,
         Epsilon = 0.00001,
+        SingleEpsilon = 1.401298e-45,
         EpsilonNormalSqrt = 1e-15,
         Kph2Mph = 0.621371,
         Mph2Kph = 1.60934,
@@ -1287,6 +1290,7 @@ declare module BABYLON {
         private static LoadingState;
         static IsLayerMasked(mask: number, layer: number): boolean;
         static GetLoadingState(): number;
+        static Approximately(a: number, b: number): boolean;
         static MoveTowardsVector2(current: BABYLON.Vector2, target: BABYLON.Vector2, maxDelta: number): BABYLON.Vector2;
         static MoveTowardsVector2ToRef(current: BABYLON.Vector2, target: BABYLON.Vector2, maxDelta: number, result: BABYLON.Vector2): void;
         static MoveTowardsVector3(current: BABYLON.Vector3, target: BABYLON.Vector3, maxDelta: number): BABYLON.Vector3;
@@ -1343,9 +1347,11 @@ declare module BABYLON {
         /** Sets a Quaternion result set from the passed Euler float angles in degrees (x, y, z). */
         static FromEulerToRef(x: number, y: number, z: number, result: BABYLON.Quaternion): void;
         /** Computes the difference in quaternion values */
-        static QuaternionDiff(value1: BABYLON.Quaternion, value2: BABYLON.Quaternion): BABYLON.Quaternion;
+        static QuaternionDiff(source: BABYLON.Quaternion, other: BABYLON.Quaternion): BABYLON.Quaternion;
         /** Computes the difference in quaternion values to a result value */
-        static QuaternionDiffToRef(value1: BABYLON.Quaternion, value2: BABYLON.Quaternion, result: BABYLON.Quaternion): void;
+        static QuaternionDiffToRef(source: BABYLON.Quaternion, other: BABYLON.Quaternion, result: BABYLON.Quaternion): void;
+        /** Subtracts one quaternion from another to a result value */
+        static QuaternionSubtractToRef(source: BABYLON.Quaternion, other: BABYLON.Quaternion, result: BABYLON.Quaternion): void;
         /** Multplies a quaternion by a vector (rotates vector) */
         static RotateVector(vec: BABYLON.Vector3, quat: BABYLON.Quaternion): BABYLON.Vector3;
         /** Multplies a quaternion by a vector (rotates vector) */
@@ -1696,7 +1702,7 @@ declare module BABYLON {
         private static FPS;
         private static TIME;
         private static EXIT;
-        private static XZMIN;
+        private static DEG90;
         private _frametime;
         private _layercount;
         private _updatemode;
@@ -1712,7 +1718,6 @@ declare module BABYLON {
         private _machine;
         private _deltaPosition;
         private _deltaRotation;
-        private _deltaAngleY;
         private _positionWeight;
         private _rootBoneWeight;
         private _rotationWeight;
@@ -1726,13 +1731,9 @@ declare module BABYLON {
         private _rootMotionScaling;
         private _rootMotionRotation;
         private _rootMotionPosition;
-        private _rootMotionVelocity;
         private _lastMotionRotation;
         private _lastMotionPosition;
-        private _quatRotationDiff;
-        private _quatRotateVector;
         private _deltaPositionFixed;
-        private _deltaPositionMatrix;
         private _dirtyMotionMatrix;
         private _dirtyBlenderMatrix;
         private transformForwardVector;
@@ -1745,6 +1746,9 @@ declare module BABYLON {
         private _updateMatrix;
         private _blenderMatrix;
         private _blendWeights;
+        private _emptyScaling;
+        private _emptyPosition;
+        private _emptyRotation;
         private _data;
         private _anims;
         private _numbers;
@@ -1761,13 +1765,15 @@ declare module BABYLON {
         getAnimationTime(): number;
         getDeltaPosition(): BABYLON.Vector3;
         getDeltaRotation(): BABYLON.Quaternion;
+        getAngularVelocity(): BABYLON.Vector3;
+        getRootMotionAngle(): number;
+        getRootMotionSpeed(): number;
+        getCharacterController(): BABYLON.CharacterController;
         getRuntimeController(): string;
-        protected m_rootTransform: BABYLON.TransformNode;
-        protected m_rigidbodyPhysics: BABYLON.RigidbodyPhysics;
-        protected m_characterController: BABYLON.CharacterController;
         protected m_avatarMask: Map<string, number>;
         protected m_defaultGroup: BABYLON.AnimationGroup;
         protected m_animationTargets: BABYLON.TargetedAnimation[];
+        protected m_characterController: BABYLON.CharacterController;
         protected awake(): void;
         protected late(): void;
         protected destroy(): void;
@@ -1797,18 +1803,14 @@ declare module BABYLON {
         getAnimationGroup(name: string): BABYLON.AnimationGroup;
         getAnimationGroups(): Map<string, BABYLON.AnimationGroup>;
         setAnimationGroups(groups: BABYLON.AnimationGroup[], remapTargets?: boolean): void;
-        setRootTransform(transform: BABYLON.TransformNode): void;
-        getRootTransform(): BABYLON.TransformNode;
-        getRigidbodyPhysics(): BABYLON.RigidbodyPhysics;
-        getCharacterController(): BABYLON.CharacterController;
-        getRootMotionAngle(): number;
-        getRootMotionSpeed(): number;
         private awakeStateMachine;
         private lateStateMachine;
         private destroyStateMachine;
         private updateAnimationState;
         private updateAnimationTargets;
         private updateBlendableTargets;
+        private _lastDeltaPosition;
+        private _lastDeltaRotation;
         private finalizeAnimationTargets;
         private checkStateMachine;
         private checkStateTransitions;
