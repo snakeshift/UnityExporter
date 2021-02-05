@@ -244,8 +244,8 @@ declare module BABYLON {
         static FindSceneCameraRig(transform: BABYLON.TransformNode): BABYLON.FreeCamera;
         /** Finds the specfied light rig in the scene. */
         static FindSceneLightRig(transform: BABYLON.TransformNode): BABYLON.Light;
-        /** Finds all transforms with the specified script component. */
-        static FindTransformsWithScript(scene: BABYLON.Scene, klass: string): BABYLON.TransformNode;
+        /** Finds the first transform with the specified script component. */
+        static FindTransformWithScript(scene: BABYLON.Scene, klass: string): BABYLON.TransformNode;
         /** Finds all transforms with the specified script component. */
         static FindAllTransformsWithScript(scene: BABYLON.Scene, klass: string): BABYLON.TransformNode[];
         /** Finds the specfied child transform in the scene. */
@@ -258,7 +258,7 @@ declare module BABYLON {
         static FindChildTransformWithScript(parent: BABYLON.TransformNode, klass: string, directDecendantsOnly?: boolean, predicate?: (node: BABYLON.Node) => boolean): BABYLON.TransformNode;
         /** Finds all child transforms with the specified script component. */
         static FindAllChildTransformsWithScript(parent: BABYLON.TransformNode, klass: string, directDecendantsOnly?: boolean, predicate?: (node: BABYLON.Node) => boolean): BABYLON.TransformNode[];
-        /** Searches all nodes for the instance of the specified script component. */
+        /** Searches all nodes for the first instance of the specified script component. */
         static SearchForScriptComponentByName<T extends BABYLON.ScriptComponent>(scene: BABYLON.Scene, klass: string): T;
         /** Searches all nodes for all instances of the specified script component. */
         static SearchForAllScriptComponentsByName<T extends BABYLON.ScriptComponent>(scene: BABYLON.Scene, klass: string): T[];
